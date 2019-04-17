@@ -14,14 +14,19 @@ import java.math.BigDecimal;
 public interface AccountClient {
 
     /**
-     * 用户账户付款.
-     *
-     * @param accountDO 实体类
-     * @return true 成功
+     * Account项目接口 1
      */
     @RequestMapping("/account/payment")
     @Hmily
     Boolean payment(@RequestBody AccountDTO accountDO);
+
+    /**
+     * Account项目接口 2
+     */
+    @RequestMapping("/account/updateMsg")
+    @Hmily
+    Boolean updateMsg();
+
 
 
     /**

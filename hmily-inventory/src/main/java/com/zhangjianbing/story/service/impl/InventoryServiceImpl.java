@@ -17,13 +17,8 @@ public class InventoryServiceImpl implements InventoryService {
     /**
      * logger.
      */
-
-    private final InventoryMapper inventoryMapper;
-
-    @Autowired(required = false)
-    public InventoryServiceImpl(InventoryMapper inventoryMapper) {
-        this.inventoryMapper = inventoryMapper;
-    }
+    @Autowired
+    private InventoryMapper inventoryMapper;
 
     /**
      * 扣减库存操作.
@@ -34,6 +29,7 @@ public class InventoryServiceImpl implements InventoryService {
      */
     @Override
     @Hmily(confirmMethod = "confirmMethod", cancelMethod = "cancelMethod")
+    @Transactional
     public Boolean decrease(InventoryDTO inventoryDTO) {
         System.out.println("==========springcloud调用扣减库存decrease===========");
         inventoryMapper.decrease(inventoryDTO);

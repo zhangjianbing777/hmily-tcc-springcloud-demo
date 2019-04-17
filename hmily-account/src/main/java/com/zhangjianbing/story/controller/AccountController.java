@@ -5,33 +5,29 @@ import com.zhangjianbing.story.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/account")
 public class AccountController {
 
-    private final AccountService accountService;
-
     @Autowired
-    public AccountController(AccountService accountService) {
-        this.accountService = accountService;
-    }
+    private AccountService accountService;
 
+    /**
+     * Account项目接口 1
+     */
     @RequestMapping("/payment")
     public Boolean save(@RequestBody AccountDTO accountDO) {
         return accountService.payment(accountDO);
     }
 
-    @RequestMapping("/findByUserId")
-    public BigDecimal findByUserId(@RequestParam("userId") String userId) {
-        return accountService.findByUserId(userId).getBalance();
+    /**
+     * Account项目接口 2
+     */
+    @RequestMapping("/updateMsg")
+    public Boolean updateMsg() {
+        return accountService.updateMsg();
     }
-
-
-
 
 }

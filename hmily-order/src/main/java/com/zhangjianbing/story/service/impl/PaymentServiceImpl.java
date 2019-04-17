@@ -17,56 +17,37 @@ import org.springframework.stereotype.Service;
 @SuppressWarnings("all")
 public class PaymentServiceImpl implements PaymentService {
 
-    /**
-     * logger.
-     */
+    @Autowired
+    private OrderMapper orderMapper;
 
-    private final OrderMapper orderMapper;
+    @Autowired
+    private AccountClient accountClient;
 
-    private final AccountClient accountClient;
-
-    private final InventoryClient inventoryClient;
-
-    @Autowired(required = false)
-    public PaymentServiceImpl(OrderMapper orderMapper,
-                              AccountClient accountClient,
-                              InventoryClient inventoryClient) {
-        this.orderMapper = orderMapper;
-        this.accountClient = accountClient;
-        this.inventoryClient = inventoryClient;
-    }
+    @Autowired
+    private InventoryClient inventoryClient;
 
     @Override
     @Hmily(confirmMethod = "confirmOrderStatus", cancelMethod = "cancelOrderStatus")
     public void makePayment(Order order) {
         order.setStatus(OrderStatusEnum.PAYING.getCode());
         orderMapper.update(order);
-      /*  //检查数据
-        final BigDecimal accountInfo = accountClient.findByUserId(order.getUserId());
 
-        final Integer inventoryInfo = inventoryClient.findByProductId(order.getProductId());
-
-        if (accountInfo.compareTo(order.getTotalAmount()) < 0) {
-            throw new TccRuntimeException("余额不足！");
-        }
-
-        if (inventoryInfo < order.getCount()) {
-            throw new TccRuntimeException("库存不足！");
-        }*/
-
-        //扣除用户余额
-
-        //进入扣减库存操作
+        // 进入扣减库存操作
         InventoryDTO inventoryDTO = new InventoryDTO();
         inventoryDTO.setCount(order.getCount());
         inventoryDTO.setProductId(order.getProductId());
+        System.out.println("===========执行springcloud减库存接口==========");
         inventoryClient.decrease(inventoryDTO);
 
+        // 进入扣减资金操作
         AccountDTO accountDTO = new AccountDTO();
         accountDTO.setAmount(order.getTotalAmount());
         accountDTO.setUserId(order.getUserId());
-        System.out.println("===========执行springcloud扣减资金接口==========");
+        System.out.println("===========执行Account项目接口 1==========");
         accountClient.payment(accountDTO);
+
+//        System.out.println("===========执行Account项目接口 2==========");
+//        accountClient.updateMsg();
     }
 
     @Override

@@ -14,16 +14,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class AccountServiceImpl implements AccountService {
 
-    /**
-     * logger.
-     */
     @Autowired
     private AccountMapper accountMapper;
 
 
     @Override
     @Hmily(confirmMethod = "confirm", cancelMethod = "cancel")
-    @Transactional
     public boolean payment(AccountDTO accountDTO) {
         System.out.println("============执行try付款接口===============");
         accountMapper.update(accountDTO);
@@ -33,30 +29,12 @@ public class AccountServiceImpl implements AccountService {
         return Boolean.TRUE;
     }
 
-    @Override
-    public AccountDO findByUserId(final String userId) {
-        return accountMapper.findByUserId(userId);
-    }
-
-    /**
-     * Confirm boolean.
-     *
-     * @param accountDTO the account dto
-     * @return the boolean
-     */
     public boolean confirm(AccountDTO accountDTO) {
         System.out.println("============执行confirm 付款接口===============");
         final int rows = accountMapper.confirm(accountDTO);
         return Boolean.TRUE;
     }
 
-
-    /**
-     * Cancel boolean.
-     *
-     * @param accountDTO the account dto
-     * @return the boolean
-     */
     public boolean cancel(AccountDTO accountDTO) {
         System.out.println("============执行cancel 付款接口===============");
         final int rows = accountMapper.cancel(accountDTO);
@@ -65,4 +43,31 @@ public class AccountServiceImpl implements AccountService {
         }
         return Boolean.TRUE;
     }
+
+    /**
+     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+     */
+
+    @Override
+    @Hmily(confirmMethod = "confirmMsg", cancelMethod = "cancelMsg")
+    public boolean updateMsg() {
+        System.out.println("============执行更新账户信息接口===============");
+        int i = 10 / 0;
+        return Boolean.TRUE;
+    }
+
+    public boolean confirmMsg() {
+        System.out.println("============执行 confirmMsg 付款接口===============");
+        return Boolean.TRUE;
+    }
+
+    public boolean cancelMsg() {
+        System.out.println("============执行 cancelMsg 付款接口===============");
+        return Boolean.TRUE;
+    }
+
+    /**
+     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+     */
+
 }
