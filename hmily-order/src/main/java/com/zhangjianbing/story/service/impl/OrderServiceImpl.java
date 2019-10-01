@@ -1,11 +1,16 @@
 
 package com.zhangjianbing.story.service.impl;
 
+import com.zhangjianbing.modul.api.IServiceAccountApi;
+import com.zhangjianbing.modul.api.IServiceInventoryApi;
+import com.zhangjianbing.modul.dto.AccountDTO;
+import com.zhangjianbing.modul.dto.InventoryDTO;
 import com.zhangjianbing.story.entity.Order;
 import com.zhangjianbing.story.enums.OrderStatusEnum;
 import com.zhangjianbing.story.mapper.OrderMapper;
 import com.zhangjianbing.story.service.OrderService;
 import com.zhangjianbing.story.service.PaymentService;
+import org.dromara.hmily.annotation.Hmily;
 import org.dromara.hmily.common.utils.IdWorkerUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,33 +20,65 @@ import java.util.Date;
 
 
 @Service
-@SuppressWarnings("all")
 public class OrderServiceImpl implements OrderService {
 
-    /**
-     * logger.
-     */
+    @Autowired
+    private OrderMapper orderMapper;
 
-    private final OrderMapper orderMapper;
+    @Autowired
+    private PaymentService paymentService;
 
-    private final PaymentService paymentService;
+    @Autowired
+    private IServiceInventoryApi serviceInventoryApi;
 
-    @Autowired(required = false)
-    public OrderServiceImpl(OrderMapper orderMapper, PaymentService paymentService) {
-        this.orderMapper = orderMapper;
-        this.paymentService = paymentService;
-    }
+    @Autowired
+    private IServiceAccountApi serviceAccountApi;
 
     @Override
+    @Hmily(confirmMethod = "confirmOrderStatus", cancelMethod = "cancelOrderStatus")
     public String orderPay(Integer count, BigDecimal amount) {
         final Order order = buildOrder(count, amount);
         final int rows = orderMapper.save(order);
-
         if (rows > 0) {
-            paymentService.makePayment(order);
+
+            // 更新订单状态 --- 支付中
+            order.setStatus(OrderStatusEnum.PAYING.getCode());
+            orderMapper.update(order);
+
+            // 进入扣减库存操作
+//            InventoryDTO inventoryDTO = new InventoryDTO();
+//            inventoryDTO.setCount(order.getCount());
+//            inventoryDTO.setProductId(order.getProductId());
+//            System.out.println("=========== 执行springcloud减库存接口 ==========");
+//            serviceInventoryApi.decrease(inventoryDTO);
+
+            // 进入扣减资金操作
+//            AccountDTO accountDTO = new AccountDTO();
+//            accountDTO.setAmount(order.getTotalAmount());
+//            accountDTO.setUserId(order.getUserId());
+//            System.out.println("=========== 执行Account项目支付接口 ==========");
+//            serviceAccountApi.payment(accountDTO);
+
+            // 更新账户信息
+//            System.out.println("=========== 执行Account项目更新账户信息接口 ==========");
+//            serviceAccountApi.updateMsg();
         }
         return "success";
     }
+
+    public void confirmOrderStatus(Order order) {
+        order.setStatus(OrderStatusEnum.PAY_SUCCESS.getCode());
+        orderMapper.update(order);
+        System.out.println("=========进行订单confirm操作完成================");
+    }
+
+    public void cancelOrderStatus(Order order) {
+        order.setStatus(OrderStatusEnum.PAY_FAIL.getCode());
+        orderMapper.update(order);
+        System.out.println("=========进行订单cancel操作完成================");
+    }
+
+    // =======================================================================================
 
     /**
      * 模拟在订单支付操作中，库存在try阶段中的库存异常

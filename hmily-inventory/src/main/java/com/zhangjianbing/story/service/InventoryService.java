@@ -1,7 +1,7 @@
 
 package com.zhangjianbing.story.service;
 
-import com.zhangjianbing.story.dto.InventoryDTO;
+import com.zhangjianbing.modul.dto.InventoryDTO;
 import com.zhangjianbing.story.entity.InventoryDO;
 import org.dromara.hmily.annotation.Hmily;
 

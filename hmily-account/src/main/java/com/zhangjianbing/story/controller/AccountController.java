@@ -1,31 +1,32 @@
 package com.zhangjianbing.story.controller;
 
-import com.zhangjianbing.story.dto.AccountDTO;
+import com.zhangjianbing.modul.api.IServiceAccountApi;
+import com.zhangjianbing.modul.dto.AccountDTO;
 import com.zhangjianbing.story.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/account")
-public class AccountController {
+public class AccountController implements IServiceAccountApi {
 
     @Autowired
     private AccountService accountService;
 
     /**
-     * Account项目接口 1
+     * 支付接口
+     * @param accountDO 支付实体
+     * @return Boolean
      */
-    @RequestMapping("/payment")
-    public Boolean save(@RequestBody AccountDTO accountDO) {
+    @Override
+    public Boolean payment(@RequestBody AccountDTO accountDO) {
         return accountService.payment(accountDO);
     }
 
     /**
-     * Account项目接口 2
+     * 更新账户信息
      */
-    @RequestMapping("/updateMsg")
+    @Override
     public Boolean updateMsg() {
         return accountService.updateMsg();
     }

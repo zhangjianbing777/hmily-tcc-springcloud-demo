@@ -1,15 +1,20 @@
+package com.zhangjianbing.modul.api;
 
-package com.zhangjianbing.story.client;
-
-import com.zhangjianbing.story.dto.InventoryDTO;
+import com.zhangjianbing.modul.dto.InventoryDTO;
 import org.dromara.hmily.annotation.Hmily;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+/**
+ * 库存模块的api
+ *
+ * @author zhangjianbing
+ * time 2019/10/1
+ */
 @FeignClient(value = "hmily-inventory")
-public interface InventoryClient {
+public interface IServiceInventoryApi {
 
     /**
      * 库存扣减.
@@ -52,4 +57,5 @@ public interface InventoryClient {
     @Hmily
     @RequestMapping("/inventory/mockWithTryTimeout")
     Boolean mockWithTryTimeout(@RequestBody InventoryDTO inventoryDTO);
+
 }

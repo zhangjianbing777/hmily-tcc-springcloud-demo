@@ -1,10 +1,10 @@
 
 package com.zhangjianbing.story.service.impl;
 
-import com.zhangjianbing.story.client.AccountClient;
-import com.zhangjianbing.story.client.InventoryClient;
-import com.zhangjianbing.story.dto.AccountDTO;
-import com.zhangjianbing.story.dto.InventoryDTO;
+import com.zhangjianbing.modul.api.IServiceAccountApi;
+import com.zhangjianbing.modul.api.IServiceInventoryApi;
+import com.zhangjianbing.modul.dto.AccountDTO;
+import com.zhangjianbing.modul.dto.InventoryDTO;
 import com.zhangjianbing.story.entity.Order;
 import com.zhangjianbing.story.enums.OrderStatusEnum;
 import com.zhangjianbing.story.mapper.OrderMapper;
@@ -21,10 +21,10 @@ public class PaymentServiceImpl implements PaymentService {
     private OrderMapper orderMapper;
 
     @Autowired
-    private AccountClient accountClient;
+    private IServiceAccountApi accountClient;
 
     @Autowired
-    private InventoryClient inventoryClient;
+    private IServiceInventoryApi inventoryClient;
 
     @Override
     @Hmily(confirmMethod = "confirmOrderStatus", cancelMethod = "cancelOrderStatus")

@@ -1,7 +1,7 @@
 
 package com.zhangjianbing.story.mapper;
 
-import com.zhangjianbing.story.dto.AccountDTO;
+import com.zhangjianbing.modul.dto.AccountDTO;
 import com.zhangjianbing.story.entity.AccountDO;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;

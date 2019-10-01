@@ -1,7 +1,7 @@
 
 package com.zhangjianbing.story.service.impl;
 
-import com.zhangjianbing.story.dto.InventoryDTO;
+import com.zhangjianbing.modul.dto.InventoryDTO;
 import com.zhangjianbing.story.entity.InventoryDO;
 import com.zhangjianbing.story.mapper.InventoryMapper;
 import com.zhangjianbing.story.service.InventoryService;
@@ -28,13 +28,27 @@ public class InventoryServiceImpl implements InventoryService {
      * @return true
      */
     @Override
-    @Hmily(confirmMethod = "confirmMethod", cancelMethod = "cancelMethod")
+    @Hmily(confirmMethod = "confirmMethod1", cancelMethod = "cancelMethod1")
     @Transactional
     public Boolean decrease(InventoryDTO inventoryDTO) {
         System.out.println("==========springcloud调用扣减库存decrease===========");
         inventoryMapper.decrease(inventoryDTO);
         return true;
     }
+
+    public Boolean confirmMethod1(InventoryDTO inventoryDTO) {
+        System.out.println("==========Springcloud调用扣减库存确认方法===========");
+        final int rows = inventoryMapper.confirm(inventoryDTO);
+        return true;
+    }
+
+    public Boolean cancelMethod1(InventoryDTO inventoryDTO) {
+        System.out.println("==========Springcloud调用扣减库存取消方法===========");
+        int rows = inventoryMapper.cancel(inventoryDTO);
+        return true;
+    }
+
+    // =================================================================================
 
     /**
      * 获取商品库存信息.
@@ -48,15 +62,30 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     @Override
-    @Hmily(confirmMethod = "confirmMethod", cancelMethod = "cancelMethod")
+    @Hmily(confirmMethod = "confirmMethod2", cancelMethod = "cancelMethod2")
     @Transactional
     public Boolean mockWithTryException(InventoryDTO inventoryDTO) {
         //这里是模拟异常所以就直接抛出异常了
         throw new HmilyRuntimeException("库存扣减异常！");
     }
 
+    public Boolean confirmMethod2(InventoryDTO inventoryDTO) {
+        System.out.println("==========Springcloud调用扣减库存确认方法===========");
+        final int rows = inventoryMapper.confirm(inventoryDTO);
+        return true;
+    }
+
+    public Boolean cancelMethod2(InventoryDTO inventoryDTO) {
+        System.out.println("==========Springcloud调用扣减库存取消方法===========");
+        int rows = inventoryMapper.cancel(inventoryDTO);
+        return true;
+    }
+
+    // =================================================================================
+
+
     @Override
-    @Hmily(confirmMethod = "confirmMethod", cancelMethod = "cancelMethod")
+    @Hmily(confirmMethod = "confirmMethod3", cancelMethod = "cancelMethod3")
     @Transactional(rollbackFor = Exception.class)
     public Boolean mockWithTryTimeout(InventoryDTO inventoryDTO) {
         try {
@@ -72,6 +101,20 @@ public class InventoryServiceImpl implements InventoryService {
         }
         return true;
     }
+
+    public Boolean confirmMethod3(InventoryDTO inventoryDTO) {
+        System.out.println("==========Springcloud调用扣减库存确认方法===========");
+        final int rows = inventoryMapper.confirm(inventoryDTO);
+        return true;
+    }
+
+    public Boolean cancelMethod3(InventoryDTO inventoryDTO) {
+        System.out.println("==========Springcloud调用扣减库存取消方法===========");
+        int rows = inventoryMapper.cancel(inventoryDTO);
+        return true;
+    }
+
+    // =================================================================================
 
     @Transactional(rollbackFor = Exception.class)
     public Boolean confirmMethodTimeout(InventoryDTO inventoryDTO) {
@@ -95,19 +138,6 @@ public class InventoryServiceImpl implements InventoryService {
         }
         return true;
         // throw new TccRuntimeException("库存扣减确认异常！");
-    }
-
-
-    public Boolean confirmMethod(InventoryDTO inventoryDTO) {
-        System.out.println("==========Springcloud调用扣减库存确认方法===========");
-        final int rows = inventoryMapper.confirm(inventoryDTO);
-        return true;
-    }
-
-    public Boolean cancelMethod(InventoryDTO inventoryDTO) {
-        System.out.println("==========Springcloud调用扣减库存取消方法===========");
-        int rows = inventoryMapper.cancel(inventoryDTO);
-        return true;
     }
 
 }

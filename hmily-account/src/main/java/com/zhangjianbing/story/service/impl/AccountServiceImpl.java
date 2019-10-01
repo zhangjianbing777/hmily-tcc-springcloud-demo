@@ -1,7 +1,7 @@
 
 package com.zhangjianbing.story.service.impl;
 
-import com.zhangjianbing.story.dto.AccountDTO;
+import com.zhangjianbing.modul.dto.AccountDTO;
 import com.zhangjianbing.story.entity.AccountDO;
 import com.zhangjianbing.story.mapper.AccountMapper;
 import com.zhangjianbing.story.service.AccountService;
@@ -23,9 +23,6 @@ public class AccountServiceImpl implements AccountService {
     public boolean payment(AccountDTO accountDTO) {
         System.out.println("============执行try付款接口===============");
         accountMapper.update(accountDTO);
-        //内嵌调用
-        //inLineService.test();
-        int i = 10 / 0;
         return Boolean.TRUE;
     }
 
@@ -52,7 +49,6 @@ public class AccountServiceImpl implements AccountService {
     @Hmily(confirmMethod = "confirmMsg", cancelMethod = "cancelMsg")
     public boolean updateMsg() {
         System.out.println("============执行更新账户信息接口===============");
-        int i = 10 / 0;
         return Boolean.TRUE;
     }
 

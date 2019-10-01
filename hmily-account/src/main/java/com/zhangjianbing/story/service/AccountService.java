@@ -2,7 +2,7 @@
 package com.zhangjianbing.story.service;
 
 
-import com.zhangjianbing.story.dto.AccountDTO;
+import com.zhangjianbing.modul.dto.AccountDTO;
 import org.dromara.hmily.annotation.Hmily;
 
 public interface AccountService {

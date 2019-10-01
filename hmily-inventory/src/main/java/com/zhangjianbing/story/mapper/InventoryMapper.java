@@ -1,7 +1,7 @@
 
 package com.zhangjianbing.story.mapper;
 
-import com.zhangjianbing.story.dto.InventoryDTO;
+import com.zhangjianbing.modul.dto.InventoryDTO;
 import com.zhangjianbing.story.entity.InventoryDO;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;

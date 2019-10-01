@@ -13,6 +13,8 @@
         <module>hmily-eureka</module>
         <module>hmily-account</module>
         <module>hmily-inventory</module>
+        <module>service-api</module>
+        <module>edge-service</module>
     </modules>
 
     <parent>

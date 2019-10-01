@@ -1,23 +1,21 @@
-package com.zhangjianbing.story;
+package com.zhangjianbing.edge;
 
-import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
 /**
- * @author 张建兵 Ryan
- * time 2019/4/16
+ * @author zhangjianbing
+ * time 2019/10/1
  */
 @SpringBootApplication
 @EnableEurekaClient
 @EnableFeignClients(basePackages = "com.zhangjianbing")
-@MapperScan("com.zhangjianbing.story.mapper")
-public class ApplicationOrder {
+public class EdgeServiceBootStrap {
 
     public static void main(String[] args) {
-        SpringApplication.run(ApplicationOrder.class, args);
+        new SpringApplicationBuilder(EdgeServiceBootStrap.class).run(args);
     }
 
 }

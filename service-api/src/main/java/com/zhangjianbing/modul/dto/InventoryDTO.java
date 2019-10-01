@@ -1,5 +1,5 @@
 
-package com.zhangjianbing.story.dto;
+package com.zhangjianbing.modul.dto;
 
 import lombok.Data;
 

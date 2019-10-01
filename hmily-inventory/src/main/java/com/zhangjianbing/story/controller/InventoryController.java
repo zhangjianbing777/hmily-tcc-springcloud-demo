@@ -1,42 +1,36 @@
 
 package com.zhangjianbing.story.controller;
 
-import com.zhangjianbing.story.dto.InventoryDTO;
+import com.zhangjianbing.modul.api.IServiceInventoryApi;
+import com.zhangjianbing.modul.dto.InventoryDTO;
 import com.zhangjianbing.story.service.InventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/inventory")
-@SuppressWarnings("all")
-public class InventoryController {
-
-    private final InventoryService inventoryService;
+public class InventoryController implements IServiceInventoryApi {
 
     @Autowired
-    public InventoryController(InventoryService inventoryService) {
-        this.inventoryService = inventoryService;
-    }
+    private InventoryService inventoryService;
 
-    @RequestMapping("/decrease")
+    @Override
     public Boolean decrease(@RequestBody InventoryDTO inventoryDTO) {
         return inventoryService.decrease(inventoryDTO);
     }
 
-    @RequestMapping("/findByProductId")
+    @Override
     public Integer findByProductId(@RequestParam("productId") String productId) {
         return inventoryService.findByProductId(productId).getTotalInventory();
     }
 
-    @RequestMapping("/mockWithTryException")
+    @Override
     public Boolean mockWithTryException(@RequestBody InventoryDTO inventoryDTO) {
         return inventoryService.mockWithTryException(inventoryDTO);
     }
 
-    @RequestMapping("/mockWithTryTimeout")
+    @Override
     public Boolean mockWithTryTimeout(@RequestBody InventoryDTO inventoryDTO) {
         return inventoryService.mockWithTryTimeout(inventoryDTO);
     }
