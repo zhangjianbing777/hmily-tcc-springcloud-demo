@@ -15,16 +15,24 @@ public class OrderController implements IServiceOrderApi {
     @Autowired
     private OrderService orderService;
 
+    @Override
     public String orderPay(@RequestParam(value = "count") Integer count, @RequestParam(value = "amount") BigDecimal amount) {
         return orderService.orderPay(count, amount);
     }
 
+    @Override
     public String mockInventoryWithTryException(@RequestParam(value = "count") Integer count, @RequestParam(value = "amount") BigDecimal amount) {
         return orderService.mockInventoryWithTryException(count, amount);
     }
 
+    @Override
     public String mockInventoryWithTryTimeout(@RequestParam(value = "count") Integer count, @RequestParam(value = "amount") BigDecimal amount) {
         return orderService.mockInventoryWithTryTimeout(count, amount);
+    }
+
+    @Override
+    public String testTcc() {
+        return orderService.testTcc();
     }
 
 }

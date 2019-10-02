@@ -42,4 +42,9 @@ public interface OrderService {
      * @param order 订单实体类
      */
     void updateOrderStatus(Order order);
+
+    /**
+     * 测试Tcc框架的确认和取消方法
+     */
+    String testTcc();
 }

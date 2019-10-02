@@ -140,4 +140,23 @@ public class OrderServiceImpl implements OrderService {
         order.setUserId("10000");
         return order;
     }
+
+    // ========================================================================
+
+    @Override
+    @Hmily(confirmMethod = "TccConfirm", cancelMethod = "TccCancel")
+    public String testTcc() {
+        System.out.println("进入【OrderServiceImpl#testTcc】的try方法");
+        return "success";
+    }
+
+    public String TccConfirm() {
+        System.out.println("进入【OrderServiceImpl#TccConfirm】的confirm方法");
+        return "sucess";
+    }
+
+    public String TccCancel() {
+        System.out.println("进入【OrderServiceImpl#TccCancel】的TccCancel方法");
+        return "sucess";
+    }
 }
