@@ -26,28 +26,40 @@ public class PaymentServiceImpl implements PaymentService {
     @Autowired
     private IServiceInventoryApi inventoryClient;
 
+    @Autowired
+    private IServiceInventoryApi serviceInventoryApi;
+
+    @Autowired
+    private IServiceAccountApi serviceAccountApi;
+
     @Override
     @Hmily(confirmMethod = "confirmOrderStatus", cancelMethod = "cancelOrderStatus")
     public void makePayment(Order order) {
+        // 更新订单状态 --- 支付中
         order.setStatus(OrderStatusEnum.PAYING.getCode());
+        // order模块本地接口
         orderMapper.update(order);
 
         // 进入扣减库存操作
         InventoryDTO inventoryDTO = new InventoryDTO();
         inventoryDTO.setCount(order.getCount());
         inventoryDTO.setProductId(order.getProductId());
-        System.out.println("===========执行springcloud减库存接口==========");
-        inventoryClient.decrease(inventoryDTO);
+        System.out.println("=========== 执行springcloud减库存接口 ==========");
+        // 库存模块远程接口
+        serviceInventoryApi.decrease(inventoryDTO);
 
         // 进入扣减资金操作
         AccountDTO accountDTO = new AccountDTO();
         accountDTO.setAmount(order.getTotalAmount());
         accountDTO.setUserId(order.getUserId());
-        System.out.println("===========执行Account项目接口 1==========");
-        accountClient.payment(accountDTO);
+        System.out.println("=========== 执行Account项目支付接口 ==========");
+        // 资金模块远程接口
+        serviceAccountApi.payment(accountDTO);
 
-//        System.out.println("===========执行Account项目接口 2==========");
-//        accountClient.updateMsg();
+        // 更新账户信息
+        System.out.println("=========== 执行Account项目更新账户信息接口 ==========");
+        // 资金模块远程接口
+        serviceAccountApi.updateMsg();
     }
 
     @Override

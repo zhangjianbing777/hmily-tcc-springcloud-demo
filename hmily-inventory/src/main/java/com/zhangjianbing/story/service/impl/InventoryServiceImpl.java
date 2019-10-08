@@ -29,7 +29,6 @@ public class InventoryServiceImpl implements InventoryService {
      */
     @Override
     @Hmily(confirmMethod = "confirmMethod1", cancelMethod = "cancelMethod1")
-    @Transactional
     public Boolean decrease(InventoryDTO inventoryDTO) {
         System.out.println("==========springcloud调用扣减库存decrease===========");
         inventoryMapper.decrease(inventoryDTO);
