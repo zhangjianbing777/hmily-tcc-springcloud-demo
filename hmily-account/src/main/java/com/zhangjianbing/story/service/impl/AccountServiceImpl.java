@@ -20,6 +20,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     @Hmily(confirmMethod = "confirm", cancelMethod = "cancel")
+    @Transactional
     public boolean payment(AccountDTO accountDTO) {
         System.out.println("============执行try付款接口===============");
         accountMapper.update(accountDTO);

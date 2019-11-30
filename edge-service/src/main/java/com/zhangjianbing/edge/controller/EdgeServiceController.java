@@ -2,7 +2,10 @@ package com.zhangjianbing.edge.controller;
 
 import com.zhangjianbing.modul.api.IServiceOrderApi;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 
@@ -23,11 +26,10 @@ public class EdgeServiceController {
         return pay;
     }
 
-    @GetMapping(value = "/testTcc")
-    public String testTcc() {
-        // 远程接口
-        String tcc = serviceOrderApi.testTcc();
-        return tcc;
+    @PostMapping(value = "/mockRuntimeException")
+    public String mockRuntimeException(@RequestParam(value = "count") Integer count, @RequestParam(value = "amount") BigDecimal amount) {
+        String result = serviceOrderApi.mockInventoryWithTryException(count, amount);
+        return result;
     }
 
 }

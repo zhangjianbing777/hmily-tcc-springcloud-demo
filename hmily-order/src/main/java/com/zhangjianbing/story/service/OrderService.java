@@ -43,8 +43,4 @@ public interface OrderService {
      */
     void updateOrderStatus(Order order);
 
-    /**
-     * 测试Tcc框架的确认和取消方法
-     */
-    String testTcc();
 }

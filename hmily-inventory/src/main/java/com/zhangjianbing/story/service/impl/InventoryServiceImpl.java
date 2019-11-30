@@ -61,10 +61,10 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     @Override
-    @Hmily(confirmMethod = "confirmMethod2", cancelMethod = "cancelMethod2")
+    @Hmily
     @Transactional
     public Boolean mockWithTryException(InventoryDTO inventoryDTO) {
-        //这里是模拟异常所以就直接抛出异常了
+        inventoryMapper.decrease(inventoryDTO);
         throw new HmilyRuntimeException("库存扣减异常！");
     }
 

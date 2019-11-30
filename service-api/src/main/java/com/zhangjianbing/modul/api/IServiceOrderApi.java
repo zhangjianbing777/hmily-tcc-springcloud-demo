@@ -27,7 +27,4 @@ public interface IServiceOrderApi {
     @PostMapping(value = "/order/mockInventoryWithTryTimeout")
     String mockInventoryWithTryTimeout(@RequestParam(value = "count") Integer count, @RequestParam(value = "amount") BigDecimal amount);
 
-    @GetMapping(value = "/testTcc")
-    @Hmily
-    String testTcc();
 }

@@ -30,9 +30,5 @@ public class OrderController implements IServiceOrderApi {
         return orderService.mockInventoryWithTryTimeout(count, amount);
     }
 
-    @Override
-    public String testTcc() {
-        return orderService.testTcc();
-    }
 
 }

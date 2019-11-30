@@ -26,40 +26,27 @@ public class PaymentServiceImpl implements PaymentService {
     @Autowired
     private IServiceInventoryApi inventoryClient;
 
-    @Autowired
-    private IServiceInventoryApi serviceInventoryApi;
-
-    @Autowired
-    private IServiceAccountApi serviceAccountApi;
-
     @Override
     @Hmily(confirmMethod = "confirmOrderStatus", cancelMethod = "cancelOrderStatus")
     public void makePayment(Order order) {
-        // 更新订单状态 --- 支付中
+        // 支付中
         order.setStatus(OrderStatusEnum.PAYING.getCode());
-        // order模块本地接口
+        // 更新订单状态
         orderMapper.update(order);
 
         // 进入扣减库存操作
         InventoryDTO inventoryDTO = new InventoryDTO();
         inventoryDTO.setCount(order.getCount());
         inventoryDTO.setProductId(order.getProductId());
-        System.out.println("=========== 执行springcloud减库存接口 ==========");
-        // 库存模块远程接口
-        serviceInventoryApi.decrease(inventoryDTO);
+        System.out.println("===========调用远程减库存接口==========");
+        inventoryClient.decrease(inventoryDTO);
 
         // 进入扣减资金操作
         AccountDTO accountDTO = new AccountDTO();
         accountDTO.setAmount(order.getTotalAmount());
         accountDTO.setUserId(order.getUserId());
-        System.out.println("=========== 执行Account项目支付接口 ==========");
-        // 资金模块远程接口
-        serviceAccountApi.payment(accountDTO);
-
-        // 更新账户信息
-        System.out.println("=========== 执行Account项目更新账户信息接口 ==========");
-        // 资金模块远程接口
-        serviceAccountApi.updateMsg();
+        System.out.println("===========调用远程扣减资金接口==========");
+        accountClient.payment(accountDTO);
     }
 
     @Override
@@ -72,11 +59,13 @@ public class PaymentServiceImpl implements PaymentService {
         AccountDTO accountDTO = new AccountDTO();
         accountDTO.setAmount(order.getTotalAmount());
         accountDTO.setUserId(order.getUserId());
-        accountClient.payment(accountDTO);
+        Boolean payment = accountClient.payment(accountDTO);
+        System.out.println("==========远程调用扣减金额接口=====" + payment + "=====");
         InventoryDTO inventoryDTO = new InventoryDTO();
         inventoryDTO.setCount(order.getCount());
         inventoryDTO.setProductId(order.getProductId());
-        inventoryClient.mockWithTryException(inventoryDTO);
+        Boolean inventory = inventoryClient.mockWithTryException(inventoryDTO);
+        System.out.println("==========远程调用扣减库存接口=====" + inventory + "=====");
         return "success";
     }
 
@@ -100,12 +89,14 @@ public class PaymentServiceImpl implements PaymentService {
 
     public void confirmOrderStatus(Order order) {
         order.setStatus(OrderStatusEnum.PAY_SUCCESS.getCode());
+        // 更新订单状态--支付成功
         orderMapper.update(order);
         System.out.println("=========进行订单confirm操作完成================");
     }
 
     public void cancelOrderStatus(Order order) {
         order.setStatus(OrderStatusEnum.PAY_FAIL.getCode());
+        // 更新订单状态--支付失败
         orderMapper.update(order);
         System.out.println("=========进行订单cancel操作完成================");
     }
